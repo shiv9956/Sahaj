@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle2, AlertCircle, RefreshCw, Eye } from 'lucide-react';
+import { Upload, FileText, CheckCircle2, AlertCircle, RefreshCw, Eye, ArrowRight } from 'lucide-react';
 
 interface ExtractedField {
   name: string;
@@ -12,9 +12,10 @@ interface ExtractedField {
 
 interface DocumentUploadReviewProps {
   onDocConfirmed: (docType: string, fields: Record<string, string>) => void;
+  onNextStep?: () => void;
 }
 
-export function DocumentUploadReview({ onDocConfirmed }: DocumentUploadReviewProps) {
+export function DocumentUploadReview({ onDocConfirmed, onNextStep }: DocumentUploadReviewProps) {
   const [docType, setDocType] = useState<'admission_letter' | 'salary_slip'>('admission_letter');
   const [uploadState, setUploadState] = useState<'idle' | 'uploading' | 'review' | 'confirmed'>('idle');
   const [fields, setFields] = useState<ExtractedField[]>([]);
@@ -80,7 +81,7 @@ export function DocumentUploadReview({ onDocConfirmed }: DocumentUploadReviewPro
             <button
               type="button"
               onClick={() => handleSimulatedUpload('admission_letter')}
-              className="p-4 border border-dashed border-slate-700 hover:border-emerald-500/50 rounded-xl bg-slate-950/40 hover:bg-slate-800/40 transition-all text-left group"
+              className="p-4 border border-dashed border-slate-700 hover:border-emerald-500/50 rounded-xl bg-slate-950/40 hover:bg-slate-800/40 transition-all text-left group cursor-pointer"
             >
               <Upload className="w-5 h-5 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
               <div className="text-xs font-semibold text-slate-200">Admission / Fee Letter</div>
@@ -90,7 +91,7 @@ export function DocumentUploadReview({ onDocConfirmed }: DocumentUploadReviewPro
             <button
               type="button"
               onClick={() => handleSimulatedUpload('salary_slip')}
-              className="p-4 border border-dashed border-slate-700 hover:border-emerald-500/50 rounded-xl bg-slate-950/40 hover:bg-slate-800/40 transition-all text-left group"
+              className="p-4 border border-dashed border-slate-700 hover:border-emerald-500/50 rounded-xl bg-slate-950/40 hover:bg-slate-800/40 transition-all text-left group cursor-pointer"
             >
               <Upload className="w-5 h-5 text-blue-400 mb-2 group-hover:scale-110 transition-transform" />
               <div className="text-xs font-semibold text-slate-200">Salary Slip (Co-applicant)</div>
@@ -145,14 +146,14 @@ export function DocumentUploadReview({ onDocConfirmed }: DocumentUploadReviewPro
             <button
               type="button"
               onClick={handleConfirm}
-              className="flex-1 py-2.5 px-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5"
+              className="flex-1 py-2.5 px-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <CheckCircle2 className="w-4 h-4" /> Confirm & Auto-Fill Profile
             </button>
             <button
               type="button"
               onClick={() => setUploadState('idle')}
-              className="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-lg text-xs transition-colors"
+              className="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-lg text-xs transition-colors cursor-pointer"
             >
               Reset
             </button>
@@ -161,19 +162,31 @@ export function DocumentUploadReview({ onDocConfirmed }: DocumentUploadReviewPro
       )}
 
       {uploadState === 'confirmed' && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center space-y-2">
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center space-y-3">
           <CheckCircle2 className="w-6 h-6 text-emerald-400 mx-auto" />
           <div className="text-xs font-semibold text-emerald-300">Document Fields Confirmed!</div>
           <p className="text-[11px] text-slate-400">
             Profile has been auto-filled with provenance tag <code className="text-emerald-400">extracted_from_doc</code>.
           </p>
-          <button
-            type="button"
-            onClick={() => setUploadState('idle')}
-            className="text-[11px] text-slate-400 hover:text-slate-200 underline pt-1"
-          >
-            Upload another document
-          </button>
+          {onNextStep && (
+            <button
+              type="button"
+              onClick={onNextStep}
+              className="w-full py-2.5 px-4 bg-[#00BAF2] hover:bg-cyan-600 text-white font-bold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+            >
+              <span>Proceed to Products & Protection (S9)</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
+          <div>
+            <button
+              type="button"
+              onClick={() => setUploadState('idle')}
+              className="text-[11px] text-slate-400 hover:text-slate-200 underline pt-1 cursor-pointer"
+            >
+              Upload another document
+            </button>
+          </div>
         </div>
       )}
     </div>

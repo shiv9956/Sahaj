@@ -281,13 +281,17 @@ export default function SahajHomePage() {
       <div className="bg-white border-b border-slate-200 px-6 py-3 shadow-sm overflow-x-auto">
         <div className="max-w-6xl mx-auto flex items-center justify-between text-xs min-w-[600px]">
           {[
-            { step: 1, label: 'Goal Intent', done: true },
-            { step: 2, label: 'Profile Facts', done: true },
-            { step: 3, label: 'Compare Options', active: true },
-            { step: 4, label: 'Doc Check', done: false },
-            { step: 5, label: 'Next Action', done: false }
+            { step: 1, label: 'Goal Intent', done: true, tab: 'chat' as const },
+            { step: 2, label: 'Profile Facts', done: activeTab !== 'chat', active: activeTab === 'chat', tab: 'chat' as const },
+            { step: 3, label: 'Compare Options', done: activeTab === 'docs' || activeTab === 'options', active: activeTab === 'simulator', tab: 'simulator' as const },
+            { step: 4, label: 'Doc Check', done: activeTab === 'options', active: activeTab === 'docs', tab: 'docs' as const },
+            { step: 5, label: 'Next Action', done: false, active: activeTab === 'options', tab: 'options' as const }
           ].map((item, idx) => (
-            <div key={idx} className="flex items-center space-x-2">
+            <div
+              key={idx}
+              onClick={() => setActiveTab(item.tab)}
+              className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+            >
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[11px] ${
                   item.done
@@ -559,7 +563,10 @@ export default function SahajHomePage() {
           {/* Document Autopilot Tab */}
           {activeTab === 'docs' && (
             <div className="bg-white border border-slate-200 rounded-b-xl shadow-sm p-4">
-              <DocumentUploadReview onDocConfirmed={handleDocConfirmed} />
+              <DocumentUploadReview
+                onDocConfirmed={handleDocConfirmed}
+                onNextStep={() => setActiveTab('options')}
+              />
             </div>
           )}
         </div>
@@ -730,25 +737,63 @@ export default function SahajHomePage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between text-xs">
           <div className="flex items-center space-x-2">
             <span className="font-bold text-[#002E6E]">Next Best Action (S10):</span>
-            <span className="text-slate-600">Upload Admission Letter & Fee Structure</span>
+            <span className="text-slate-600">
+              {activeTab === 'chat' && 'Specify Loan Amount & Tenure'}
+              {activeTab === 'simulator' && 'Adjust Repayment Terms or Proceed to Doc Check'}
+              {activeTab === 'docs' && 'Upload & Confirm Admission Letter or Salary Slip'}
+              {activeTab === 'options' && 'Compare Products, Protection & Request Sanction Letter'}
+            </span>
           </div>
 
           <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setActiveTab('simulator')}
-              className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold transition-colors"
-            >
-              Adjust Simulator
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('docs');
-              }}
-              className="bg-[#00BAF2] hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg font-bold flex items-center space-x-1 shadow-sm transition-colors"
-            >
-              <span>Proceed to Doc Check</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {activeTab !== 'simulator' && (
+              <button
+                onClick={() => setActiveTab('simulator')}
+                className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer"
+              >
+                Adjust Simulator
+              </button>
+            )}
+
+            {activeTab === 'chat' && (
+              <button
+                onClick={() => setActiveTab('simulator')}
+                className="bg-[#00BAF2] hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg font-bold flex items-center space-x-1 shadow-sm transition-colors cursor-pointer"
+              >
+                <span>Simulate Repayment</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {activeTab === 'simulator' && (
+              <button
+                onClick={() => setActiveTab('docs')}
+                className="bg-[#00BAF2] hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg font-bold flex items-center space-x-1 shadow-sm transition-colors cursor-pointer"
+              >
+                <span>Proceed to Doc Check</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {activeTab === 'docs' && (
+              <button
+                onClick={() => setActiveTab('options')}
+                className="bg-[#00BAF2] hover:bg-cyan-600 text-white px-4 py-1.5 rounded-lg font-bold flex items-center space-x-1 shadow-sm transition-colors cursor-pointer"
+              >
+                <span>Compare Products & Protection</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {activeTab === 'options' && (
+              <button
+                onClick={() => setShowHumanDesk(true)}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg font-bold flex items-center space-x-1 shadow-sm transition-colors cursor-pointer"
+              >
+                <span>Human Desk Escalation</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
       </footer>
