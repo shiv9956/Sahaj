@@ -177,8 +177,14 @@ export default function SahajHomePage() {
     alert('All remembered journey data deleted from Cognee & Mongo per DPDP privacy guidelines!');
   };
 
+  const [docConfirmed, setDocConfirmed] = useState(false);
+
   const handleDocConfirmed = (type: string, fields: Record<string, string>) => {
     setRememberedItems(prev => [...prev, `Doc Confirmed (${type}): ${Object.keys(fields).join(', ')}`]);
+    setDocConfirmed(true);
+    setTimeout(() => {
+      setActiveTab('options');
+    }, 600);
   };
 
   return (
@@ -282,10 +288,10 @@ export default function SahajHomePage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between text-xs min-w-[600px]">
           {[
             { step: 1, label: 'Goal Intent', done: true, tab: 'chat' as const },
-            { step: 2, label: 'Profile Facts', done: activeTab !== 'chat', active: activeTab === 'chat', tab: 'chat' as const },
-            { step: 3, label: 'Compare Options', done: activeTab === 'docs' || activeTab === 'options', active: activeTab === 'simulator', tab: 'simulator' as const },
-            { step: 4, label: 'Doc Check', done: activeTab === 'options', active: activeTab === 'docs', tab: 'docs' as const },
-            { step: 5, label: 'Next Action', done: false, active: activeTab === 'options', tab: 'options' as const }
+            { step: 2, label: 'Profile Facts', done: activeTab !== 'chat' || docConfirmed, active: activeTab === 'chat' && !docConfirmed, tab: 'chat' as const },
+            { step: 3, label: 'Compare Options', done: activeTab === 'docs' || activeTab === 'options' || docConfirmed, active: activeTab === 'simulator', tab: 'simulator' as const },
+            { step: 4, label: 'Doc Check', done: activeTab === 'options' || docConfirmed, active: activeTab === 'docs' && !docConfirmed, tab: 'docs' as const },
+            { step: 5, label: 'Next Action', done: false, active: activeTab === 'options' || docConfirmed, tab: 'options' as const }
           ].map((item, idx) => (
             <div
               key={idx}
