@@ -126,10 +126,12 @@ export const FinancialProfileSchema = z.object({
   borrower_role: FinancialProfileFieldSchema.optional(),
   amount_paise: FinancialProfileFieldSchema.optional(),
   tenure_months: FinancialProfileFieldSchema.optional(),
+  tenure_pref_months: FinancialProfileFieldSchema.optional(),
   coapplicant_monthly_income_paise: FinancialProfileFieldSchema.optional(),
   existing_emi_paise: FinancialProfileFieldSchema.optional(),
   affordable_emi_paise: FinancialProfileFieldSchema.optional(),
   collateral_willingness: FinancialProfileFieldSchema.optional(),
+  cover_type: FinancialProfileFieldSchema.optional(),
   priority_ranking: z.array(z.string()).optional()
 });
 export type FinancialProfile = z.infer<typeof FinancialProfileSchema>;
