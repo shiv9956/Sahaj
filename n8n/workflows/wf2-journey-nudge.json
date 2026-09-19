@@ -1,0 +1,117 @@
+{
+  "name": "Sahaj WF-2: Asynchronous Journey Continuity & Nudge Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "journey-documents-pending",
+        "options": {}
+      },
+      "id": "node-webhook-2",
+      "name": "Documents Pending Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "node-wait-timer",
+      "name": "Demo Wait Timer (60s)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "GET",
+        "url": "=http://localhost:3001/api/journeys/{{$node['Documents Pending Webhook'].json.body.journey_id}}",
+        "options": {}
+      },
+      "id": "node-get-state",
+      "name": "Fetch Latest Journey State",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.state}}",
+              "value2": "DOCUMENTS_PENDING"
+            }
+          ]
+        }
+      },
+      "id": "node-if-pending",
+      "name": "Check If Still Pending",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=http://localhost:3001/internal/n8n/nudges/{{$node['Documents Pending Webhook'].json.body.journey_id}}/sent",
+        "options": {}
+      },
+      "id": "node-nudge-callback",
+      "name": "Dispatch Nudge Notification Callback",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [980, 200]
+    }
+  ],
+  "connections": {
+    "Documents Pending Webhook": {
+      "main": [
+        [
+          {
+            "node": "Demo Wait Timer (60s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Demo Wait Timer (60s)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Latest Journey State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Latest Journey State": {
+      "main": [
+        [
+          {
+            "node": "Check If Still Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Still Pending": {
+      "main": [
+        [
+          {
+            "node": "Dispatch Nudge Notification Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

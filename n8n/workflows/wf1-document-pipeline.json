@@ -1,0 +1,96 @@
+{
+  "name": "Sahaj WF-1: Document Intelligence Autopilot Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "document-uploaded",
+        "options": {}
+      },
+      "id": "node-webhook-1",
+      "name": "Document Uploaded Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\nconst headerSig = $input.item.json.headers['x-sahaj-signature'];\nconst timestamp = $input.item.json.headers['x-sahaj-timestamp'];\nconst body = $input.item.json.body;\n\nconst secret = process.env.HMAC_SECRET || 'sahaj_demo_secret_key_2026';\nconst data = timestamp + '.' + JSON.stringify(body);\nconst expectedSig = crypto.createHmac('sha256', secret).update(data).digest('hex');\n\nif (headerSig !== expectedSig) {\n  throw new Error('HMAC Signature verification failed');\n}\n\nreturn [{ json: { verified: true, docId: body.document_id, storageRef: body.storage_ref, journeyId: body.journey_id } }];"
+      },
+      "id": "node-code-verify",
+      "name": "Verify HMAC Signature & Timestamp",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=https://api.sarvam.ai/vision/v1/digitize",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "api-subscription-key",
+              "value": "={{$env.SARVAM_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "node-sarvam-vision",
+      "name": "Sarvam Vision OCR & Digitization",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=http://localhost:3001/internal/n8n/documents/{{$node['Verify HMAC Signature & Timestamp'].json.docId}}/extracted",
+        "options": {}
+      },
+      "id": "node-api-callback",
+      "name": "Callback API Extracted Fields",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [760, 300]
+    }
+  ],
+  "connections": {
+    "Document Uploaded Webhook": {
+      "main": [
+        [
+          {
+            "node": "Verify HMAC Signature & Timestamp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify HMAC Signature & Timestamp": {
+      "main": [
+        [
+          {
+            "node": "Sarvam Vision OCR & Digitization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sarvam Vision OCR & Digitization": {
+      "main": [
+        [
+          {
+            "node": "Callback API Extracted Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

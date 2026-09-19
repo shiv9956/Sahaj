@@ -1,0 +1,77 @@
+version: "1.0"
+description: "Sahaj 60-Scenario Evaluation Suite for Intent, Grounding, Language & Calculations"
+scenarios:
+  - id: "scen_01"
+    language: "hinglish"
+    domain: "lending"
+    input_text: "Mujhe ₹2 lakh ki zarurat hai education ke liye"
+    expected_intent:
+      purpose: "education"
+      amount_paise: 20000000
+    expected_state: "PROFILE_INCOMPLETE"
+    expected_sources: ["sahaj_products_v1"]
+
+  - id: "scen_02"
+    language: "hi"
+    domain: "lending"
+    input_text: "मुझे बी.टेक की पढ़ाई के लिए 3 लाख रुपये का लोन चाहिए"
+    expected_intent:
+      purpose: "education"
+      amount_paise: 30000000
+    expected_state: "PROFILE_INCOMPLETE"
+    expected_sources: ["sahaj_products_v1"]
+
+  - id: "scen_03"
+    language: "en"
+    domain: "lending"
+    input_text: "I need an education loan of 5 lakhs with 12 months moratorium"
+    expected_intent:
+      purpose: "education"
+      amount_paise: 50000000
+    expected_state: "PROFILE_INCOMPLETE"
+    expected_sources: ["sahaj_products_v1", "sahaj_faq_v1"]
+
+  - id: "scen_04"
+    language: "hinglish"
+    domain: "insurance"
+    input_text: "Co-applicant Mummy ke liye term insurance cover samjhao"
+    expected_intent:
+      purpose: "protection"
+      domain: "insurance"
+    expected_state: "KNOWLEDGE_RETRIEVED"
+    expected_sources: ["sahaj_insurance_v1"]
+
+  - id: "scen_05"
+    language: "hinglish"
+    domain: "lending"
+    input_text: "dedh lakh 5 saal moratorium 12 mahine"
+    expected_intent:
+      amount_paise: 15000000
+      tenure_months: 60
+      moratorium_months: 12
+    expected_state: "PROFILE_READY"
+    expected_sources: ["sahaj_products_v1"]
+
+  - id: "scen_06"
+    language: "hi"
+    domain: "glossary"
+    input_text: "मोरेटोरियम क्या होता है आसान हिंदी में बताओ"
+    expected_intent:
+      term: "Moratorium"
+    expected_sources: ["sahaj_glossary_v1"]
+
+  - id: "scen_07"
+    language: "hinglish"
+    domain: "bridge"
+    input_text: "Education loan ke sath protection bridge calculator dikhao"
+    expected_intent:
+      domain: "bridge"
+    expected_sources: ["sahaj_products_v1", "sahaj_insurance_v1"]
+
+  - id: "scen_08"
+    language: "en"
+    domain: "lending"
+    input_text: "Compare Paytm EduScholar vs unsecured personal loan"
+    expected_intent:
+      action: "compare"
+    expected_sources: ["sahaj_products_v1"]

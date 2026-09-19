@@ -1,0 +1,31 @@
+expectations:
+  - id: exp_01
+    query: "Paytm EduScholar Loan moratorium period"
+    expected_entities:
+      - "Paytm EduScholar Premier Education Loan"
+      - "Moratorium Period"
+    expected_facts:
+      - "Course duration + 6 months"
+
+  - id: exp_02
+    query: "Co-applicant requirements for education loan"
+    expected_entities:
+      - "Co-applicant"
+    expected_facts:
+      - "Parent or Guardian"
+      - "net monthly income of ₹25,000"
+
+  - id: exp_03
+    query: "Free-Look Period term insurance"
+    expected_entities:
+      - "Paytm Suraksha Term Life Protect"
+      - "Free-Look Period"
+    expected_facts:
+      - "30 days"
+
+  - id: exp_04
+    query: "Health insurance pre-existing disease waiting period"
+    expected_entities:
+      - "Paytm Swasthya Family Health Shield"
+    expected_facts:
+      - "36 months"
