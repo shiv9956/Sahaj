@@ -1,3 +1,4 @@
+```markdown
 # SAHAJ — सहज
 
 > **AI-Powered Financial Journey Companion**  
@@ -38,41 +39,35 @@
 
 ## 🏗 Architecture & System Topology
 
-
-```
-
-```
-                     ┌────────────────────────────────────────────────────┐
-
-```
-
-USER (Voice / Text) ─►│ NEXT.JS WEB CLIENT (PWA)                           │
-│ Chat · Journey Rail · Simulator · Compare · Docs   │
-│ Trust Receipt · Memory Control · Judge Mode        │
-│ Shared pure-TS `engines` runs client-side          │
-└───────────────┬────────────────────────────────────┘
-│ HTTPS + SSE
-┌───────────────▼────────────────────────────────────┐
-│ FASTIFY API (Node.js, TypeScript)                  │
-│ Auth/Session · Rate Limiting · Request Tracing     │
-│ ORCHESTRATOR (Sync Execution Path):                │
-│  Lang Detect → Parse → State Machine → Tools →     │
-│  Context Pack → LLM Gateway → GROUNDING GATE →     │
-│  SSE Stream → Trust Receipt Delivery               │
-└──┬──────┬───────┬────────┬─────────┬───────────────┘
-│      │       │        │         │
-┌─────────▼┐ ┌───▼────┐ ┌▼──────┐ ┌▼───────┐ ┌▼────────────┐
-│ COGNEE   │ │ ENGINES│ │ LLM   │ │ SARVAM │ │ PRODUCT    │
-│ Shared KB│ │ (Pure  │ │GATEWAY│ │ STT/TTS│ │ CONNECTOR  │
-│ + User   │ │ TS math│ │Sarvam │ │ Vision │ │ Mock Paytm │
-│ Memory   │ │ logic) │ │/ Claude│ │ Xlate │ │ (Pluggable)│
-└──────────┘ └────────┘ └───────┘ └────────┘ └─────────────┘
-│
-┌────────────▼──────────┐   Outbox    ┌──────────────────────────┐
-│ MONGODB · REDIS       │────────────►│ n8n (Async Workflows)    │
-│ Document Storage      │◄────────────│ OCR pipeline · Nudges    │
-└───────────────────────┘  Callbacks  │ Escalation · Freshness   │
-(HMAC)    └──────────────────────────┘
+```text
+                         ┌────────────────────────────────────────────────────┐
+   USER (Voice / Text) ─►│ NEXT.JS WEB CLIENT (PWA)                           │
+                         │ Chat · Journey Rail · Simulator · Compare · Docs   │
+                         │ Trust Receipt · Memory Control · Judge Mode        │
+                         │ Shared pure-TS `engines` runs client-side          │
+                         └───────────────┬────────────────────────────────────┘
+                                         │ HTTPS + SSE
+                         ┌───────────────▼────────────────────────────────────┐
+                         │ FASTIFY API (Node.js, TypeScript)                  │
+                         │ Auth/Session · Rate Limiting · Request Tracing     │
+                         │ ORCHESTRATOR (Sync Execution Path):                │
+                         │  Lang Detect → Parse → State Machine → Tools →     │
+                         │  Context Pack → LLM Gateway → GROUNDING GATE →     │
+                         │  SSE Stream → Trust Receipt Delivery               │
+                         └──┬──────┬───────┬────────┬─────────┬───────────────┘
+                            │      │       │        │         │
+                  ┌─────────▼┐ ┌───▼────┐ ┌▼──────┐ ┌▼───────┐ ┌▼────────────┐
+                  │ COGNEE   │ │ ENGINES│ │ LLM   │ │ SARVAM │ │ PRODUCT    │
+                  │ Shared KB│ │ (Pure  │ │GATEWAY│ │ STT/TTS│ │ CONNECTOR  │
+                  │ + User   │ │ TS math│ │Sarvam │ │ Vision │ │ Mock Paytm │
+                  │ Memory   │ │ logic) │ │/ Claude│ │ Xlate │ │ (Pluggable)│
+                  └──────────┘ └────────┘ └───────┘ └────────┘ └─────────────┘
+                            │
+               ┌────────────▼──────────┐   Outbox    ┌──────────────────────────┐
+               │ MONGODB · REDIS       │────────────►│ n8n (Async Workflows)    │
+               │ Document Storage      │◄────────────│ OCR pipeline · Nudges    │
+               └───────────────────────┘  Callbacks  │ Escalation · Freshness   │
+                                           (HMAC)    └──────────────────────────┘
 
 ```
 
@@ -81,10 +76,12 @@ USER (Voice / Text) ─►│ NEXT.JS WEB CLIENT (PWA)                          
 ## 🚀 Quick Start Guide
 
 ### Prerequisites
-- **Node.js** >= 18.0.0
-- **pnpm** >= 8.0.0
+
+* **Node.js** >= 18.0.0
+* **pnpm** >= 8.0.0
 
 ### 1. Clone & Install
+
 ```bash
 git clone [https://github.com/shiv9956/Sahaj.git](https://github.com/shiv9956/Sahaj.git)
 cd Sahaj
@@ -154,20 +151,5 @@ Sahaj includes a modular `FintechProductConnector` interface backed by a synthet
 * Distributed under the [MIT License](https://www.google.com/search?q=LICENSE).
 
 ```
-
-### Key fixes applied:
-1. **Broken Local Path Fixed:** Replaced `file:///c:/Users/...` with the clean repository-relative path `docs/EVAL_REPORT.md`.
-2. **Correct Repo Target:** Updated the clone URL to target `[https://github.com/shiv9956/Sahaj.git](https://github.com/shiv9956/Sahaj.git)`.
-3. **Environment Setup:** Added explicit core `.env` variable guidance so anyone cloning the repo knows what keys are expected.
-4. **Badges & Visual Structure:** Added status badges and cleaned up trailing formatting artifacts and trailing `#`.
-
----
-
-<ElicitationsGroup>
-Would you like me to tailor or add anything else to the documentation?
-- **Workflow / Demo Setup:** Add specific steps for importing and activating the n8n workflows.
-- **Demo Script:** Add a quick 2-minute walkthrough guide for hackathon judges (`?judge=1` and `?chaos=1`).
-- **File Export:** Output this directly into a downloadable `.md` file.
-</ElicitationsGroup>
 
 ```
