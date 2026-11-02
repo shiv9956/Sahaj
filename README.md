@@ -1,19 +1,14 @@
-```markdown
 # SAHAJ — सहज
 
-> **AI-Powered Financial Journey Companion**  
-> *Paytm Hackathon · Track 2: AI-Powered Financial Journeys*  
+> **AI-Powered Financial Journey Companion**
+> *Paytm Hackathon · Track 2: AI-Powered Financial Journeys*
 > **Team:** The NPM Tigers | **Stack:** Next.js (PWA), Fastify (API), TypeScript, Cognee, Sarvam AI, n8n, MongoDB Atlas, Redis
-
-[![CI / Test Suite](https://img.shields.io/badge/Tests-Vitest%20(39%2B%20Passing)-brightgreen)](docs/EVAL_REPORT.md)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
 ## 📌 One-Line Thesis
 
-*Clarity before credit.* The primary barrier in Indian retail finance is not access—it is comprehension: jargon, regional language friction, opaque calculations, and hidden fine print. 
+*Clarity before credit.* The primary barrier in Indian retail finance is not access—it is comprehension: jargon, regional language friction, opaque calculations, and hidden fine print.
 
 **Sahaj** is a journey engine (not a generic chatbot) that translates spoken or typed aspirations—like *"Mujhe ₹2 lakh ki zarurat hai education ke liye"*—into structured, evidence-backed, step-by-step financial journeys across credit and insurance.
 
@@ -22,7 +17,7 @@
 ## 🏆 Core Capabilities
 
 | Feature ID | Feature | Description | Engine / Integration |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **S1** | **Trust Receipt** | Every rate, calculation, or eligibility claim carries verifiable citations: retrieved sources, active rules, and mathematical assumptions. | **Cognee** |
 | **S2** | **Bol-Kar-Samjho** | Voice-first multilingual and Hinglish interaction with press-to-talk audio and explicit **Confirmation Chips** for financial values. | **Sarvam AI (Saaras v3)** |
 | **S3** | **Regret-Proof Simulator** | Real-time browser-evaluated sliders for principal, tenure, and moratorium with EMI, IRR (annual cost), and DTI stress tests. | Pure-TS `@sahaj/engines` |
@@ -39,7 +34,7 @@
 
 ## 🏗 Architecture & System Topology
 
-```text
+```
                          ┌────────────────────────────────────────────────────┐
    USER (Voice / Text) ─►│ NEXT.JS WEB CLIENT (PWA)                           │
                          │ Chat · Journey Rail · Simulator · Compare · Docs   │
@@ -83,7 +78,7 @@
 ### 1. Clone & Install
 
 ```bash
-git clone [https://github.com/shiv9956/Sahaj.git](https://github.com/shiv9956/Sahaj.git)
+git clone https://github.com/shiv9956/Sahaj.git
 cd Sahaj
 pnpm install
 
@@ -149,7 +144,3 @@ Sahaj includes a modular `FintechProductConnector` interface backed by a synthet
 
 * **Team The NPM Tigers** — Built for the Paytm Hackathon (Track 2: AI-Powered Financial Journeys).
 * Distributed under the [MIT License](https://www.google.com/search?q=LICENSE).
-
-```
-
-```
